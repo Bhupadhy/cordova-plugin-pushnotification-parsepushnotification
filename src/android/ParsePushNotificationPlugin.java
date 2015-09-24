@@ -21,7 +21,7 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
 	private CallbackContext callbackContextKeepCallback;
 	//
 	private String applicationId;
-	private String clientKey;	
+	private String clientKey;
 	//
 	private static boolean destroyed;
 		
@@ -92,6 +92,10 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
 			return true;
 		}
 */		
+		else if (action.equals("getInstallationId")) {
+			this.getInstallationId(callbackContext);
+			return true;
+		}
 		else if (action.equals("subscribeToChannel")) {
 			subscribeToChannel(action, args, callbackContext);
 			
@@ -142,6 +146,15 @@ public class ParsePushNotificationPlugin extends CordovaPlugin {
 			}
 		});
 	}
+
+	private void getInstallationId(final CallbackContext callbackContext) {
+        cordova.getThreadPool().execute(new Runnable() {
+            public void run() {
+                String installationId = ParseInstallation.getCurrentInstallation().getInstallationId();
+                callbackContext.success(installationId);
+            }
+        });
+    }
 	
 /*	
 	private void registerAsPushNotificationClient(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {

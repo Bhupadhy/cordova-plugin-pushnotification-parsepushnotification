@@ -47,6 +47,16 @@
 }
 */
 
+- (void)getInstallationId: (CDVInvokedUrlCommand *) command {
+	[self.commandDelegate runInBackground:^{
+        CDVPluginResult* pluginResult = nil;
+        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+        NSString *installationId = currentInstallation.installationId;
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:installationId];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }];
+}
+
 - (void)subscribeToChannel: (CDVInvokedUrlCommand *)command {
 	NSString* channel = [command.arguments objectAtIndex:0];
 	NSLog(@"%@", channel);
